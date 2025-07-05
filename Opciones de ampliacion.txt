@@ -1,0 +1,2 @@
+1.- integrar una funcion que identifique todos los productos sin registro de ventas en el ultimo año.
+2.- Devolver insights como respuesta de la propia ejecucion
