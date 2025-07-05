@@ -5,16 +5,16 @@ from PyQt5.QtWidgets import QFileDialog
 import Cargar
 import limpiar
 
-class Ui_RFA(object):
-    def setupUi(self, RFA):
-        RFA.setObjectName("RFA")
-        RFA.resize(804, 569)
-        RFA.setFixedSize(804, 569)
+class Ui_FP(object):
+    def setupUi(self, FP):
+        FP.setObjectName("FP")
+        FP.resize(804, 569)
+        FP.setFixedSize(804, 569)
         font = QtGui.QFont()
         font.setFamily("Helvetica")
         font.setPointSize(10)
-        RFA.setFont(font)
-        self.centralwidget = QtWidgets.QWidget(RFA)
+        FP.setFont(font)
+        self.centralwidget = QtWidgets.QWidget(FP)
         self.centralwidget.setObjectName("centralwidget")
 
         # Estilo general para los botones
@@ -197,18 +197,18 @@ class Ui_RFA(object):
         self.progressBar.setVisible(False)
         self.progressBar.setObjectName("progressBar")
 
-        # Añadir centralwidget al RFA
-        RFA.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(RFA)
+        # Añadir centralwidget al FP
+        FP.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(FP)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 804, 27))
         self.menubar.setObjectName("menubar")
-        RFA.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(RFA)
+        FP.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(FP)
         self.statusbar.setObjectName("statusbar")
-        RFA.setStatusBar(self.statusbar)
+        FP.setStatusBar(self.statusbar)
 
-        self.retranslateUi(RFA)
-        QtCore.QMetaObject.connectSlotsByName(RFA)
+        self.retranslateUi(FP)
+        QtCore.QMetaObject.connectSlotsByName(FP)
 
         # Conectar botones con sus funciones
         self.Cargar_Archivo.clicked.connect(self.cargar_archivo)
@@ -221,18 +221,18 @@ class Ui_RFA(object):
 
         self.dataset_listo = None
 
-    def retranslateUi(self, RFA):
+    def retranslateUi(self, FP):
         _translate = QtCore.QCoreApplication.translate
-        RFA.setWindowTitle(_translate("RFA", "Reacsa Forecast Assistant"))
-        self.Cargar_Archivo.setText(_translate("RFA", "Cargar Archivo Excel"))
-        self.Visualizar_Archivo.setText(_translate("RFA", "Visualizar Archivo"))
-        self.Help.setText(_translate("RFA", "?"))
-        self.Etiqueta_preparar.setText(_translate("RFA", "Preparar Datos"))
-        self.Etiqueta_modelar.setText(_translate("RFA", "Modelar Datos"))
-        self.Limpiar_Base.setText(_translate("RFA", "Limpiar Base de Datos"))
-        self.Hiperparametros_1.setText(_translate("RFA", "Hiperparámetros: 1"))
-        self.Hiperparametros_2.setText(_translate("RFA", "Hiperparámetros: 2"))
-        self.Guardar_Archivo.setText(_translate("RFA", "Guardar Archivos"))
+        FP.setWindowTitle(_translate("FP", "Reacsa Forecast Assistant"))
+        self.Cargar_Archivo.setText(_translate("FP", "Cargar Archivo Excel"))
+        self.Visualizar_Archivo.setText(_translate("FP", "Visualizar Archivo"))
+        self.Help.setText(_translate("FP", "?"))
+        self.Etiqueta_preparar.setText(_translate("FP", "Preparar Datos"))
+        self.Etiqueta_modelar.setText(_translate("FP", "Modelar Datos"))
+        self.Limpiar_Base.setText(_translate("FP", "Limpiar Base de Datos"))
+        self.Hiperparametros_1.setText(_translate("FP", "Hiperparámetros: 1"))
+        self.Hiperparametros_2.setText(_translate("FP", "Hiperparámetros: 2"))
+        self.Guardar_Archivo.setText(_translate("FP", "Guardar Archivos"))
 
     # Funciones para los botones
     
@@ -291,8 +291,8 @@ class Ui_RFA(object):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    RFA = QtWidgets.QMainWindow()
-    ui = Ui_RFA()
-    ui.setupUi(RFA)
-    RFA.show()
+    FP = QtWidgets.QMainWindow()
+    ui = Ui_FP()
+    ui.setupUi(FP)
+    FP.show()
     sys.exit(app.exec_())
