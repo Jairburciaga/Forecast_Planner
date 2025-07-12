@@ -106,19 +106,19 @@ class Ui_FP(object):
         self.Limpiar_Base.setStyleSheet(button_style)
         self.Limpiar_Base.setObjectName("Limpiar_Base")
 
-        # Botón Hiperparametros: 1
-        self.Hiperparametros_1 = QtWidgets.QPushButton(self.centralwidget)
-        self.Hiperparametros_1.setGeometry(QtCore.QRect(410, 230, 251, 71))
-        self.Hiperparametros_1.setFont(font)
-        self.Hiperparametros_1.setStyleSheet(button_style)
-        self.Hiperparametros_1.setObjectName("Hiperparametros_1")
+        # Botón Entrenar Modelo
+        self.entrenar_modelo = QtWidgets.QPushButton(self.centralwidget)
+        self.entrenar_modelo.setGeometry(QtCore.QRect(410, 230, 251, 71))
+        self.entrenar_modelo.setFont(font)
+        self.entrenar_modelo.setStyleSheet(button_style)
+        self.entrenar_modelo.setObjectName("entrenar_modelo")
 
-        # Botón Hiperparametros: 2
-        self.Hiperparametros_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.Hiperparametros_2.setGeometry(QtCore.QRect(410, 310, 251, 71))
-        self.Hiperparametros_2.setFont(font)
-        self.Hiperparametros_2.setStyleSheet(button_style)
-        self.Hiperparametros_2.setObjectName("Hiperparametros_2")
+        # Botón Generar Pronósticos
+        self.pronosticos = QtWidgets.QPushButton(self.centralwidget)
+        self.pronosticos.setGeometry(QtCore.QRect(410, 310, 251, 71))
+        self.pronosticos.setFont(font)
+        self.pronosticos.setStyleSheet(button_style)
+        self.pronosticos.setObjectName("pronosticos")
 
         # Botón Guardar Archivo
         self.Guardar_Archivo = QtWidgets.QPushButton(self.centralwidget)
@@ -215,8 +215,8 @@ class Ui_FP(object):
         self.Visualizar_Archivo.clicked.connect(self.visualizar_archivo)
         self.Help.clicked.connect(self.mostrar_ayuda)
         self.Limpiar_Base.clicked.connect(self.limpiar_base_datos)
-        self.Hiperparametros_1.clicked.connect(self.calcular_hiperparametros_1)
-        self.Hiperparametros_2.clicked.connect(self.calcular_hiperparametros_2)
+        self.entrenar_modelo.clicked.connect(self.calcular_entrenar_modelo)
+        self.pronosticos.clicked.connect(self.calcular_pronosticos)
         self.Guardar_Archivo.clicked.connect(self.guardar_archivos)
 
         self.dataset_listo = None
@@ -230,8 +230,8 @@ class Ui_FP(object):
         self.Etiqueta_preparar.setText(_translate("FP", "Preparar Datos"))
         self.Etiqueta_modelar.setText(_translate("FP", "Modelar Datos"))
         self.Limpiar_Base.setText(_translate("FP", "Limpiar Base de Datos"))
-        self.Hiperparametros_1.setText(_translate("FP", "Hiperparámetros: 1"))
-        self.Hiperparametros_2.setText(_translate("FP", "Hiperparámetros: 2"))
+        self.entrenar_modelo.setText(_translate("FP", "Hiperparámetros: 1"))
+        self.pronosticos.setText(_translate("FP", "Hiperparámetros: 2"))
         self.Guardar_Archivo.setText(_translate("FP", "Guardar Archivos"))
 
     # Funciones para los botones
@@ -280,10 +280,10 @@ class Ui_FP(object):
             else:
                 self.Consola.append("❌ Primero debes cargar un archivo válido.")
 
-    def calcular_hiperparametros_1(self):
+    def entrenar_modelo(self):
         self.Consola.append("Función de hiperparámetros 1 no implementada")
 
-    def calcular_hiperparametros_2(self):
+    def pronosticos(self):
         self.Consola.append("Función de hiperparámetros 2 no implementada")
 
     def guardar_archivos(self):
