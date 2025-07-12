@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecast_Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .input-focus:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-indigo-900 mb-2">Forecast Planner</h1>
+            <p class="text-lg text-indigo-700">Sistema de pronósticos inteligentes para ventas</p>
+        </header>
+
+        <!-- Main Card -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 max-w-4xl mx-auto">
+            <!-- File Upload Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-indigo-800">Carga de Datos</h2>
+                    
+                    <!-- Upload File Button -->
+                    <div class="flex flex-col space-y-2">
+                        <button id="uploadBtn" class="btn-hover transition-all duration-300 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-lg flex items-center justify-center space-x-2">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Cargar Archivo</span>
+                        </button>
+                        <input type="file" id="fileInput" class="hidden" accept=".csv,.xlsx,.xls">
+                        <p class="text-sm text-gray-600 mt-1">Formatos soportados: CSV, XLSX</p>
+                    </div>
+                    
+                    <!-- Clear DB Button -->
+                    <div class="pt-4">
+                        <button id="clearDbBtn" class="btn-hover transition-all duration-300 bg-rose-600 hover:bg-rose-700 text-white py-3 px-6 rounded-lg flex items-center justify-center space-x-2">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Limpiar Base de Datos</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Parameters Section -->
+                <div class="space-y-4">
+                    <h2 class="text-xl font-semibold text-indigo-800">Parámetros</h2>
+                    
+                    <div class="space-y-3">
+                        <!-- Periodos Input -->
+                        <div>
+                            <label for="periodos" class="block text-sm font-medium text-gray-700 mb-1">Periodos</label>
+                            <input type="text" id="periodos" class="input-focus transition-all w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200">
+                        </div>
+                        
+                        <!-- DE Input -->
+                        <div>
+                            <label for="de" class="block text-sm font-medium text-gray-700 mb-1">DE</label>
+                            <input type="text" id="de" class="input-focus transition-all w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-200">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Model Actions Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Train Model Button -->
+                <div>
+                    <button id="trainModelBtn" class="btn-hover transition-all duration-300 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-6 rounded-lg flex items-center justify-center space-x-2">
+                        <i class="fas fa-brain"></i>
+                        <span>Entrenar Modelo</span>
+                    </button>
+                </div>
+                
+                <!-- Generate Forecasts Button -->
+                <div>
+                    <button id="generateForecastsBtn" class="btn-hover transition-all duration-300 w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg flex items-center justify-center space-x-2">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Generar Pronósticos</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Save Files Button -->
+            <div class="text-center">
+                <button id="saveFilesBtn" class="btn-hover transition-all duration-300 bg-amber-600 hover:bg-amber-700 text-white py-3 px-8 rounded-lg flex items-center justify-center space-x-2 mx-auto">
+                    <i class="fas fa-save"></i>
+                    <span>Guardar Archivos</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Status/Log Section -->
+        <div class="glass-effect rounded-2xl shadow-xl p-6 max-w-4xl mx-auto mt-8">
+            <h2 class="text-xl font-semibold text-indigo-800 mb-4">Registro de Actividades</h2>
+            <div id="statusLog" class="bg-white bg-opacity-50 rounded-lg p-4 h-48 overflow-y-auto text-sm font-mono">
+                <p class="text-gray-500">Sistema listo. Seleccione una acción para comenzar...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const clearDbBtn = document.getElementById('clearDbBtn');
+        const trainModelBtn = document.getElementById('trainModelBtn');
+        const generateForecastsBtn = document.getElementById('generateForecastsBtn');
+        const saveFilesBtn = document.getElementById('saveFilesBtn');
+        const periodosInput = document.getElementById('periodos');
+        const deInput = document.getElementById('de');
+        const statusLog = document.getElementById('statusLog');
+
+        // Helper function to add messages to the log
+        function logMessage(message, isError = false) {
+            const timestamp = new Date().toLocaleTimeString();
+            const messageElement = document.createElement('p');
+            messageElement.innerHTML = `<span class="text-gray-500">[${timestamp}]</span> ${message}`;
+            if (isError) {
+                messageElement.classList.add('text-rose-600');
+            } else {
+                messageElement.classList.add('text-indigo-600');
+            }
+            statusLog.appendChild(messageElement);
+            statusLog.scrollTop = statusLog.scrollHeight;
+        }
+
+        // API Endpoints (you'll need to replace these with your actual endpoints)
+        const API_ENDPOINTS = {
+            UPLOAD_FILE: '/api/upload',
+            CLEAR_DB: '/api/clear-db',
+            TRAIN_MODEL: '/api/train-model',
+            GENERATE_FORECASTS: '/api/generate-forecasts',
+            SAVE_FILES: '/api/save-files'
+        };
+
+        // Event Listeners
+
+        // Upload File Button
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', async (e) => {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                logMessage(`Archivo seleccionado: ${file.name}`);
+                
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    logMessage("Subiendo archivo al servidor...");
+                    
+                    // API Call to upload file
+                    const response = await fetch(API_ENDPOINTS.UPLOAD_FILE, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        logMessage(`Archivo cargado exitosamente. ${result.message}`);
+                    } else {
+                        throw new Error(result.error || 'Error al cargar el archivo');
+                    }
+                } catch (error) {
+                    logMessage(`Error: ${error.message}`, true);
+                }
+            }
+        });
+
+        // Clear DB Button
+        clearDbBtn.addEventListener('click', async () => {
+            if (confirm('¿Está seguro que desea limpiar la base de datos? Esta acción no se puede deshacer.')) {
+                try {
+                    logMessage("Iniciando limpieza de la base de datos...");
+                    
+                    // API Call to clear database
+                    const response = await fetch(API_ENDPOINTS.CLEAR_DB, {
+                        method: 'POST'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        logMessage(`Base de datos limpiada: ${result.message}`);
+                    } else {
+                        throw new Error(result.error || 'Error al limpiar la base de datos');
+                    }
+                } catch (error) {
+                    logMessage(`Error: ${error.message}`, true);
+                }
+            }
+        });
+
+        // Train Model Button
+        trainModelBtn.addEventListener('click', async () => {
+            const periodos = periodosInput.value.trim();
+            const de = deInput.value.trim();
+            
+            if (!periodos || !de) {
+                logMessage("Error: Debe completar los campos 'Periodos' y 'DE' antes de entrenar el modelo.", true);
+                return;
+            }
+            
+            try {
+                logMessage("Iniciando entrenamiento del modelo...");
+                
+                // API Call to train model
+                const response = await fetch(API_ENDPOINTS.TRAIN_MODEL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        periodos: periodos,
+                        de: de
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    logMessage(`Modelo entrenado exitosamente. ${result.message}`);
+                } else {
+                    throw new Error(result.error || 'Error al entrenar el modelo');
+                }
+            } catch (error) {
+                logMessage(`Error: ${error.message}`, true);
+            }
+        });
+
+        // Generate Forecasts Button
+        generateForecastsBtn.addEventListener('click', async () => {
+            const periodos = periodosInput.value.trim();
+            const de = deInput.value.trim();
+            
+            if (!periodos || !de) {
+                logMessage("Error: Debe completar los campos 'Periodos' y 'DE' antes de generar pronósticos.", true);
+                return;
+            }
+            
+            try {
+                logMessage("Generando pronósticos...");
+                
+                // API Call to generate forecasts
+                const response = await fetch(API_ENDPOINTS.GENERATE_FORECASTS, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        periodos: periodos,
+                        de: de
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    logMessage(`Pronósticos generados exitosamente. ${result.message}`);
+                } else {
+                    throw new Error(result.error || 'Error al generar pronósticos');
+                }
+            } catch (error) {
+                logMessage(`Error: ${error.message}`, true);
+            }
+        });
+
+        // Save Files Button
+        saveFilesBtn.addEventListener('click', async () => {
+            try {
+                logMessage("Preparando archivos para descarga...");
+                
+                // API Call to save files
+                const response = await fetch(API_ENDPOINTS.SAVE_FILES, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    // Assuming the API returns a file for download
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'pronosticos_' + new Date().toISOString().slice(0, 10) + '.zip';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    
+                    logMessage("Archivos guardados y descargados exitosamente.");
+                } else {
+                    const result = await response.json();
+                    throw new Error(result.error || 'Error al guardar los archivos');
+                }
+            } catch (error) {
+                logMessage(`Error: ${error.message}`, true);
+            }
+        });
+    </script>
+</body>
+</html>
